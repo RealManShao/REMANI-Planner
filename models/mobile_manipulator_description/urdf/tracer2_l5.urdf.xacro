@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<robot name="tracer2_l5" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:arg name="mount_x" default="0.0"/>
+  <xacro:arg name="mount_y" default="0.0"/>
+  <xacro:arg name="mount_z" default="0.23"/>
+  <xacro:arg name="mount_roll" default="0.23"/>
+  <xacro:arg name="mount_pitch" default="-0.02"/>
+  <xacro:arg name="mount_yaw" default="0.03"/>
+
+  <xacro:include filename="$(find mobile_manipulator_description)/urdf/tracer2_fragment.urdf.xacro"/>
+  <xacro:include filename="$(find mobile_manipulator_description)/urdf/l5_fragment.urdf.xacro"/>
+
+  <joint name="base_to_l5" type="fixed">
+    <origin xyz="${mount_x} ${mount_y} ${mount_z}" rpy="${mount_roll} ${mount_pitch} ${mount_yaw}"/>
+    <parent link="base_link"/>
+    <child link="l5_base_link"/>
+  </joint>
+</robot>

@@ -10,6 +10,7 @@
 #include <visualization_msgs/Marker.h>
 #include <visualization_msgs/MarkerArray.h>
 #include "plan_env/grid_map.h"
+#include "remani/core/kinematic_model.hpp"
 
 namespace remani_planner
 {
@@ -94,7 +95,16 @@ namespace remani_planner
             return useFastArmer_;
         }
         
+        // NEW: Bridge to new core
+        void setKinematicModel(std::shared_ptr<remani::core::KinematicModelBase> model) {
+            kinematic_model_ = model;
+        }
+        std::shared_ptr<remani::core::KinematicModelBase> getKinematicModel() const {
+            return kinematic_model_;
+        }
+        
     private:
+        std::shared_ptr<remani::core::KinematicModelBase> kinematic_model_;
         std::vector<Eigen::Vector3d> color_set_;
         std::shared_ptr<GridMap> grid_map_;
         bool useFastArmer_;

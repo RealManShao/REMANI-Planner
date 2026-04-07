@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>meshes</name>
+  <version>0.0.0</version>
+  <description>Mesh resources for L5 and other robots</description>
+  <maintainer email="todo@todo.todo">todo</maintainer>
+  <license>TODO</license>
+  <buildtool_depend>catkin</buildtool_depend>
+</package>

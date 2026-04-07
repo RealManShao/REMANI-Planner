@@ -19,6 +19,7 @@
 #include <std_msgs/Float64.h>
 
 int _manipulator_dof;
+std::vector<std::string> _manipulator_joint_names;
 
 ros::Subscriber car_cmd_sub;
 ros::Subscriber joint_cmd_sub, gripper_cmd_sub;
@@ -131,6 +132,7 @@ void pubJointState(){ // pos cmd
 	sensor_msgs::JointState joint_state;
 	joint_state.header.stamp = ros::Time::now();
 	joint_state.header.frame_id = "world";
+	joint_state.name = _manipulator_joint_names;
 	std::vector<double> joint_p, joint_v, joint_effort;
 	joint_p.clear();
 	joint_v.clear();
@@ -165,6 +167,13 @@ int main (int argc, char** argv)
     ros::NodeHandle nh( "~" );
 
 	nh.param("mm/manipulator_dof", _manipulator_dof, -1);
+	nh.getParam("mm/manipulator_joint_names", _manipulator_joint_names);
+	if ((int)_manipulator_joint_names.size() != _manipulator_dof) {
+		_manipulator_joint_names.clear();
+		for (int i = 0; i < _manipulator_dof; ++i) {
+			_manipulator_joint_names.push_back("joint" + std::to_string(i + 1));
+		}
+	}
 	
 	std::vector<double> init_state;
     nh.getParam("fsm/init_state", init_state);
