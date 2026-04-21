@@ -1,41 +1,8 @@
-# REMANI-Planner
+# only_add_mm
+This repo is only for adding mobile manipulator support to the original REMANI-Planner.
 
-**RE**al-time Whole-body Motion Planning for Mobile **MANI**pulators Using Environment-adaptive Search and Spatial-temporal Optimization
-
-![top](attachment/top.png)
-
-## News
-
-- **Jan 29, 2024**: REMANI-Planner is accepted to [ICRA 2024](https://2024.ieee-icra.org/).
-
-## Introduction
-
-REMANI-Planner presents a motion planning method capable of generating high-quality, safe, agile and feasible trajectories for mobile manipulators in real time.
-
-![system_overview](./attachment/system_overview.png)
-
-**Authors**: [Chengkai Wu](https://chengkaiwu.me/)\*, [Ruilin Wang](https://github.com/Ruilin-W)\*, [Mianzhi Song](https://robotics-star.com/), [Fei Gao](http://zju-fast.com/fei-gao/), [Jie Mei](https://scholar.google.com/citations?user=tyQm5IkAAAAJ&hl=zh-CN) and [Boyu Zhou](https://robotics-star.com/)$^{\dagger}$.
-
-**Institutions**: [STAR Group](https://robotics-star.com/), [HITSZ MAS Lab](https://hitsz-mas.github.io/mas-lab-website/) and [ZJU FAST Lab](http://zju-fast.com/).
-
-**Video**: [YouTube](https://www.youtube.com/watch?v=iYdAEZ3z11s), [Bilibili](https://www.bilibili.com/video/BV1Wz4y1V7vL).
-
-**Paper**: [Real-time Whole-body Motion Planning for Mobile Manipulators Using Environment-adaptive Search and Spatial-temporal Optimization](https://ieeexplore.ieee.org/document/10610192), 2024 IEEE International Conference on Robotics and Automation (ICRA).
-
-```
-@INPROCEEDINGS{10610192,
-  author={Wu, Chengkai and Wang, Ruilin and Song, Mianzhi and Gao, Fei and Mei, Jie and Zhou, Boyu},
-  booktitle={2024 IEEE International Conference on Robotics and Automation (ICRA)}, 
-  title={Real-time Whole-body Motion Planning for Mobile Manipulators Using Environment-adaptive Search and Spatial-temporal Optimization}, 
-  year={2024},
-  volume={},
-  number={},
-  pages={1369-1375},
-  keywords={Service robots;Dynamics;Transportation;Real-time systems;Planning;Safety;Complexity theory},
-  doi={10.1109/ICRA57147.2024.10610192}}
-```
-
-If you find this work useful or interesting, please kindly give us a star ⭐, thanks!😀
+## ISSUES
+1. The inported ARX arm always collides with something. I have tried to adjust the collision spheres but it still collides. Get error 'KinoAstar: start (1) is not free!'
 
 ## Setup
 
@@ -109,18 +76,3 @@ roslaunch remani_planner exp1.launch
   <img src="./attachment/exp1_1.gif" width = "400" height = "225"/>
 </p>
 
-## Acknowledgements
-
-We use [MINCO](https://github.com/ZJU-FAST-Lab/GCOPTER) as our trajectory representation.
-
-We borrow the framework from [AutoTrans](https://github.com/SYSU-STAR/AutoTrans).
-
-We would like to thank colleagues at [Huawei](https://www.huawei.com/en/) for their support for this work: Zehui Meng and Changjin Wang.
-
-## License
-
-The source code is released under the [GPLv3](https://www.gnu.org/licenses/) license.
-
-## Maintenance
-
-For any technical issues, please contact Chengkai Wu([chengkaiwuu@gmail.com](mailto:chengkaiwuu@gmail.com)) or Ruilin Wang(Ruilinin@outlook.com).
