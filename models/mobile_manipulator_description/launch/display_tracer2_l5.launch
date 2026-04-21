@@ -1,0 +1,20 @@
+<launch>
+  <arg name="model" default="$(find mobile_manipulator_description)/urdf/tracer2_l5.urdf.xacro" />
+  <arg name="gui" default="true" />
+  <arg name="mount_x" default="0.0" />
+  <arg name="mount_y" default="0.0" />
+  <arg name="mount_z" default="0.23" />
+  <arg name="mount_roll" default="0.23" />
+  <arg name="mount_pitch" default="-0.02" />
+  <arg name="mount_yaw" default="0.03" />
+
+  <param name="robot_description" command="$(find xacro)/xacro $(arg model) mount_x:=$(arg mount_x) mount_y:=$(arg mount_y) mount_z:=$(arg mount_z) mount_roll:=$(arg mount_roll) mount_pitch:=$(arg mount_pitch) mount_yaw:=$(arg mount_yaw)" />
+
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+    <param name="use_gui" value="$(arg gui)" />
+  </node>
+
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+
+  <node name="rviz" pkg="rviz" type="rviz" required="false" />
+</launch>
