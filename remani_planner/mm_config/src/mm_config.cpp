@@ -62,11 +62,12 @@ void MMConfig::setParam(ros::NodeHandle &nh){
     T_q_0_(1, 3) = base_mani_fixed_joint_xyz_ypr[1];
     T_q_0_(2, 3) = base_mani_fixed_joint_xyz_ypr[2];
 
-    nh.param("mm/use_fast_armer", useFastArmer_, true);
+    nh.param("mm/use_fast_armer", useFastArmer_, false);
+    nh.param("mm/use_r5a", useR5A_, true);
 
     std::string mesh_path = ros::package::getPath("mm_config")  + "/meshes/";
 
-    mesh_resource_mobile_base_ = "file://" + mesh_path + "mobile_base.STL";
+    mesh_resource_mobile_base_ = "file://" + mesh_path + "tracer2_base.STL";
 
     mesh_resource_fastarmer_base0_ = "file://" + mesh_path + "FastArmer/base_link.STL";
     mesh_resource_fastarmer_link1_ = "file://" + mesh_path + "FastArmer/link1.STL";
@@ -86,6 +87,14 @@ void MMConfig::setParam(ros::NodeHandle &nh){
     mesh_resource_ur5_wrist1_   = "file://" + mesh_path + "ur5/wrist1.dae";
     mesh_resource_ur5_wrist2_   = "file://" + mesh_path + "ur5/wrist2.dae";
     mesh_resource_ur5_wrist3_   = "file://" + mesh_path + "ur5/wrist3.dae";
+
+    mesh_resource_r5a_base_     = "file://" + mesh_path + "r5a/r5a_base_link.STL";
+    mesh_resource_r5a_link1_    = "file://" + mesh_path + "r5a/link1.STL";
+    mesh_resource_r5a_link2_    = "file://" + mesh_path + "r5a/link2.STL";
+    mesh_resource_r5a_link3_    = "file://" + mesh_path + "r5a/link3.STL";
+    mesh_resource_r5a_link4_    = "file://" + mesh_path + "r5a/link4.STL";
+    mesh_resource_r5a_link5_    = "file://" + mesh_path + "r5a/link5.STL";
+    mesh_resource_r5a_link6_    = "file://" + mesh_path + "r5a/link6.STL";
 
     B_h_ << 0.0, -1.0,
             1.0,  0.0;
@@ -247,7 +256,121 @@ void MMConfig::getAJointTran(int joint_num, double theta, Eigen::Matrix4d &T, Ei
                 break;
             }
         }
+    }else if(useR5A_){
+        // R5A configuration - based on URDF joint definitions
+        // Each transformation: T = Rotation(axis, theta) * Translation(origin)
+        switch(joint_num){
+            case 0:{
+                // joint1: axis (0,0,1), origin (0,0,0.0565)
+                T(0, 0) = cosTheta;
+                T(0, 1) = -sinTheta;
+                T(0, 3) = 0.0;
+                T(1, 0) = sinTheta;
+                T(1, 1) = cosTheta;
+                T(1, 3) = 0.0;
+                T(2, 2) = 1.0;
+                T(2, 3) = 0.0565;
+
+                T_grad(0, 0) = -sinTheta;
+                T_grad(0, 1) = -cosTheta;
+                T_grad(1, 0) = cosTheta;
+                T_grad(1, 1) = -sinTheta;
+                break;
+            }
+            case 1:{
+                // joint2: axis (0,1,0), origin (0.02,0,0.047)
+                T(0, 0) = cosTheta;
+                T(0, 2) = sinTheta;
+                T(0, 3) = 0.02;
+                T(1, 1) = 1.0;
+                T(1, 3) = 0.0;
+                T(2, 0) = -sinTheta;
+                T(2, 2) = cosTheta;
+                T(2, 3) = 0.047;
+
+                T_grad(0, 0) = -sinTheta;
+                T_grad(0, 2) = cosTheta;
+                T_grad(2, 0) = -cosTheta;
+                T_grad(2, 2) = -sinTheta;
+                break;
+            }
+            case 2:{
+                // joint3: axis (0,1,0), origin (-0.264,0,0), rpy (-3.1416,0,0)
+                // Apply -pi rotation around X first, then rotation around Y
+                T(0, 0) = -cosTheta;
+                T(0, 2) = sinTheta;
+                T(0, 3) = -0.264;
+                T(1, 1) = -1.0;
+                T(1, 3) = 0.0;
+                T(2, 0) = -sinTheta;
+                T(2, 2) = -cosTheta;
+                T(2, 3) = 0.0;
+
+                T_grad(0, 0) = sinTheta;
+                T_grad(0, 2) = cosTheta;
+                T_grad(2, 0) = -cosTheta;
+                T_grad(2, 2) = sinTheta;
+                break;
+            }
+            case 3:{
+                // joint4: axis (0,1,0), origin (0.245,-5E-05,-0.06)
+                T(0, 0) = cosTheta;
+                T(0, 2) = sinTheta;
+                T(0, 3) = 0.245;
+                T(1, 1) = 1.0;
+                T(1, 3) = -5E-05;
+                T(2, 0) = -sinTheta;
+                T(2, 2) = cosTheta;
+                T(2, 3) = -0.06;
+
+                T_grad(0, 0) = -sinTheta;
+                T_grad(0, 2) = cosTheta;
+                T_grad(2, 0) = -cosTheta;
+                T_grad(2, 2) = -sinTheta;
+                break;
+            }
+            case 4:{
+                // joint5: axis (0,0,1), origin (0.073914,5E-05,-0.083391)
+                T(0, 0) = cosTheta;
+                T(0, 1) = -sinTheta;
+                T(0, 3) = 0.073914;
+                T(1, 0) = sinTheta;
+                T(1, 1) = cosTheta;
+                T(1, 3) = 5E-05;
+                T(2, 2) = 1.0;
+                T(2, 3) = -0.083391;
+
+                T_grad(0, 0) = -sinTheta;
+                T_grad(0, 1) = -cosTheta;
+                T_grad(1, 0) = cosTheta;
+                T_grad(1, 1) = -sinTheta;
+                break;
+            }
+            case 5:{
+                // joint6: axis (1,0,0), origin (0.025286,0,0.083391), rpy (3.1416,0,0)
+                // Apply pi rotation around X first, then rotation around X (axis)
+                T(0, 0) = 1.0;
+                T(0, 3) = 0.025286;
+                T(1, 1) = -cosTheta;
+                T(1, 2) = sinTheta;
+                T(1, 3) = 0.0;
+                T(2, 1) = -sinTheta;
+                T(2, 2) = -cosTheta;
+                T(2, 3) = 0.083391;
+
+                T_grad(1, 1) = sinTheta;
+                T_grad(1, 2) = cosTheta;
+                T_grad(2, 1) = -cosTheta;
+                T_grad(2, 2) = sinTheta;
+                break;
+            }
+            default:{
+                ROS_ERROR("err joint_num: %d", joint_num);
+                break;
+            }
+        }
     }else{
+        // UR5 configuration
         if(joint_num == 0 || joint_num == 3){
             T(0, 0) = cosTheta;
             T(0, 2) = -sinTheta;
@@ -834,6 +957,13 @@ void MMConfig::setLinkPoint()
             }
             manipulator_link_pts_.push_back(link_pts);
         }
+    }else if(useR5A_){
+        // R5A collision spheres - simplified to single points at joint origins
+        for(int i = 0; i < manipulator_dof_; ++i){
+            link_pts.resize(4, 1);
+            link_pts.col(0) = Eigen::Vector4d(0, 0, 0, 1);
+            manipulator_link_pts_.push_back(link_pts);
+        }
     }else{
         for(int i = 0; i < manipulator_dof_; ++i){
             switch(i){
@@ -1108,7 +1238,90 @@ visualization_msgs::MarkerArray MMConfig::getManiMarkerArray(std::string ns, int
             T_now = T_now * T_temp;
         }
         marker_array.markers.push_back(getMarker(idx * vis_idx_size_ + 20, ns, alpha, T_now, mesh_resource_gripper_right_));
-        
+
+    }else if(useR5A_){
+        // R5A visualization based on CSV joint definitions
+        // Add rotation to flip arm upright (180° around X axis)
+        Eigen::Matrix4d T_flip = Eigen::Matrix4d::Identity();
+        T_flip.block(0, 0, 3, 3) = euler2rotation(M_PI, 0, 0);
+        T_now = T_now * T_flip;
+        marker_array.markers.push_back(getMarker(idx * vis_idx_size_ + 11, ns, alpha, T_now, mesh_resource_r5a_base_));
+
+        Eigen::Matrix4d T_temp;
+        // joint1: rotation around Z axis, origin (0,0,0.0565), rpy (0,0,0)
+        T_temp.setZero();
+        T_temp(3, 3) = 1.0;
+        T_temp.block(0, 0, 3, 3) = euler2rotation(0, 0, theta(0));
+        T_temp(2, 3) = manipulator_config_(0);  // 0.0565
+        T_now = T_now * T_temp;
+        marker_array.markers.push_back(getMarker(idx * vis_idx_size_ + 12, ns, alpha, T_now, mesh_resource_r5a_link1_));
+
+        // joint2: rotation around Y axis, origin (0.02,0,0.047), rpy (0,0,0)
+        T_temp.setZero();
+        T_temp(3, 3) = 1.0;
+        T_temp.block(0, 0, 3, 3) = euler2rotation(0, 0, 0);
+        T_temp(0, 3) = 0.02;
+        T_temp(2, 3) = 0.047;
+        T_now = T_now * T_temp;
+        T_temp.setZero();
+        T_temp(3, 3) = 1.0;
+        T_temp.block(0, 0, 3, 3) = euler2rotation(0, theta(1), 0);
+        T_now = T_now * T_temp;
+        marker_array.markers.push_back(getMarker(idx * vis_idx_size_ + 13, ns, alpha, T_now, mesh_resource_r5a_link2_));
+
+        // joint3: rotation around Y axis, origin (-0.264,0,0), rpy (-3.1416,0,0)
+        T_temp.setZero();
+        T_temp(3, 3) = 1.0;
+        T_temp.block(0, 0, 3, 3) = euler2rotation(-M_PI, 0, 0);
+        T_temp(0, 3) = -0.264;
+        T_now = T_now * T_temp;
+        T_temp.setZero();
+        T_temp(3, 3) = 1.0;
+        T_temp.block(0, 0, 3, 3) = euler2rotation(0, theta(2), 0);
+        T_now = T_now * T_temp;
+        marker_array.markers.push_back(getMarker(idx * vis_idx_size_ + 14, ns, alpha, T_now, mesh_resource_r5a_link3_));
+
+        // joint4: rotation around Y axis, origin (0.245,-5E-05,-0.06), rpy (0,0,0)
+        T_temp.setZero();
+        T_temp(3, 3) = 1.0;
+        T_temp.block(0, 0, 3, 3) = euler2rotation(0, 0, 0);
+        T_temp(0, 3) = 0.245;
+        T_temp(1, 3) = -5E-05;
+        T_temp(2, 3) = -0.06;
+        T_now = T_now * T_temp;
+        T_temp.setZero();
+        T_temp(3, 3) = 1.0;
+        T_temp.block(0, 0, 3, 3) = euler2rotation(0, theta(3), 0);
+        T_now = T_now * T_temp;
+        marker_array.markers.push_back(getMarker(idx * vis_idx_size_ + 15, ns, alpha, T_now, mesh_resource_r5a_link4_));
+
+        // joint5: rotation around Z axis, origin (0.073914,5E-05,-0.083391), rpy (0,0,0)
+        T_temp.setZero();
+        T_temp(3, 3) = 1.0;
+        T_temp.block(0, 0, 3, 3) = euler2rotation(0, 0, 0);
+        T_temp(0, 3) = 0.073914;
+        T_temp(1, 3) = 5E-05;
+        T_temp(2, 3) = -0.083391;
+        T_now = T_now * T_temp;
+        T_temp.setZero();
+        T_temp(3, 3) = 1.0;
+        T_temp.block(0, 0, 3, 3) = euler2rotation(0, 0, theta(4));
+        T_now = T_now * T_temp;
+        marker_array.markers.push_back(getMarker(idx * vis_idx_size_ + 16, ns, alpha, T_now, mesh_resource_r5a_link5_));
+
+        // joint6: rotation around X axis, origin (0.025286,0,0.083391), rpy (3.1416,0,0)
+        T_temp.setZero();
+        T_temp(3, 3) = 1.0;
+        T_temp.block(0, 0, 3, 3) = euler2rotation(M_PI, 0, 0);
+        T_temp(0, 3) = 0.025286;
+        T_temp(2, 3) = 0.083391;
+        T_now = T_now * T_temp;
+        T_temp.setZero();
+        T_temp(3, 3) = 1.0;
+        T_temp.block(0, 0, 3, 3) = euler2rotation(theta(5), 0, 0);
+        T_now = T_now * T_temp;
+        marker_array.markers.push_back(getMarker(idx * vis_idx_size_ + 17, ns, alpha, T_now, mesh_resource_r5a_link6_));
+
     }else{
         marker_array.markers.push_back(getMarker(idx * vis_idx_size_ + 11, ns, alpha, T_now, mesh_resource_ur5_base_));
 

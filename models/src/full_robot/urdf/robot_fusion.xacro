@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="combined_robot">
+
+  <xacro:include filename="$(find tracer2_description)/urdf/tracer2_description.urdf" />
+
+  <xacro:include filename="$(find r5a)/urdf/r5a.urdf" />
+
+  <joint name="base_to_arm_joint" type="fixed">
+    <parent link="base_link"/> 
+    <child link="r5a_base_link"/> 
+    <origin xyz="0 0 0.01" rpy="0 0 0"/> 
+  </joint>
+
+</robot>

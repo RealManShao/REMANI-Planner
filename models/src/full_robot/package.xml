@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>full_robot</name>
+  <version>0.0.0</version>
+  <description>The full_robot package</description>
+  <maintainer email="ivan@todo.todo">ivan</maintainer>
+  <license>TODO</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>xacro</build_depend>
+  <exec_depend>xacro</exec_depend>
+  <exec_depend>robot_state_publisher</exec_depend>
+  <exec_depend>joint_state_publisher_gui</exec_depend>
+  <exec_depend>rviz</exec_depend>
+</package>

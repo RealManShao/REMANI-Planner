@@ -93,11 +93,15 @@ namespace remani_planner
         bool getUseFastArmer() const {
             return useFastArmer_;
         }
+        bool getUseR5A() const {
+            return useR5A_;
+        }
         
     private:
         std::vector<Eigen::Vector3d> color_set_;
         std::shared_ptr<GridMap> grid_map_;
         bool useFastArmer_;
+        bool useR5A_;
         int mobile_base_dof_;
         int manipulator_dof_;
         double mobile_base_length_, mobile_base_width_, mobile_base_height_;
@@ -127,6 +131,8 @@ namespace remani_planner
         std::string mesh_resource_mobile_base_, mesh_resource_fastarmer_base0_, mesh_resource_fastarmer_link1_, mesh_resource_fastarmer_link2_;
         std::string mesh_resource_fastarmer_link3_, mesh_resource_fastarmer_link4_, mesh_resource_fastarmer_link5_, mesh_resource_fastarmer_link6_;
         std::string mesh_resource_gripper_base_, mesh_resource_gripper_left_, mesh_resource_gripper_right_;
+        std::string mesh_resource_r5a_base_, mesh_resource_r5a_link1_, mesh_resource_r5a_link2_, mesh_resource_r5a_link3_;
+        std::string mesh_resource_r5a_link4_, mesh_resource_r5a_link5_, mesh_resource_r5a_link6_;
 
         void setColorSet();
         void setLinkPoint();
